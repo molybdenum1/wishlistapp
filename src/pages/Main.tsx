@@ -2,7 +2,7 @@ import { Container } from "@mui/material"
 import { useState } from "react";
 // import { data } from "../data";
 import type { IWishlistGroup } from "../data/types";
-import { GroupWishlist } from "../components/GroupWishlist";
+import { GroupWishlist } from "../components/GroupWishlist/GroupWishlist";
 
 const data =  {
   wishlistGroup: [

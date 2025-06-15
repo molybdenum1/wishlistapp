@@ -1,0 +1,36 @@
+.navbar {
+  background-color: #333;
+  color: #fff;
+  padding: 1rem;
+  width: 100vw;         /* Full viewport width */
+  box-sizing: border-box;
+}
+
+.nav-links {
+  display: flex;
+  flex-direction: row;  /* Row direction */
+  justify-content: space-between;
+  align-items: center;  /* Vertically center items */
+  width: 100%;
+}
+
+.nav-list {
+  display: flex;        /* Make list items in a row */
+  flex-direction: row;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-list-item {
+  margin: 0 1rem;
+}
+
+.nav-list-item-link {
+  color: #fff;
+  text-decoration: none;
+}
+
+.nav-list-item-link:hover {
+  text-decoration: underline;
+}
