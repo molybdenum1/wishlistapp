@@ -3,7 +3,7 @@ import App from "../App";
 import { Main } from "../pages/Main";
 import { WishlistPage } from "../pages/WishlistPage";
 import { LoginPage } from "../pages/LoginPage";
-import { SingupPage } from "../pages/SingupPage";
+import { SignupPage } from "../pages/SingupPage";
 import { ProtectedRouter } from "../components/ProtectedRouter/ProtectedRouter";
 
 const router = createBrowserRouter([
@@ -12,7 +12,7 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       { path: "login", element: <LoginPage /> },
-      { path: "signup", element: <SingupPage /> },
+      { path: "signup", element: <SignupPage /> },
       {
         element: <ProtectedRouter />,
         children: [

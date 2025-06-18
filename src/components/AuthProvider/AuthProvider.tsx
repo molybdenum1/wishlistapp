@@ -8,7 +8,7 @@ import {
 
 interface IUser {
   id: string;
-  name: string;
+  name?: string;
   email: string;
   password: string;
   // Add other user properties as needed
@@ -16,8 +16,8 @@ interface IUser {
 
 type AuthContextType = {
   user: IUser | null;
-  login: (userData: IUser) => void;
-  register: (userData: IUser) => void;
+  login: (email: string, password: string) => void;
+  register: (email: string, password: string) => void;
   logout: () => void;
 };
 
@@ -37,15 +37,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }, []);
 
-  const register = (userData: IUser) => {
-    createUserWithEmailAndPassword(auth, userData.email, userData.password)
+  const register = (email: string, password: string) => {
+    createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const firebaseUser = userCredential.user;
         const newUser: IUser = {
           id: firebaseUser.uid,
-          name: userData.name,
-          email: firebaseUser.email || userData.email,
-          password: userData.password,
+          email: firebaseUser.email || email,
+          password: password,
         };
         setUser(newUser);
         localStorage.setItem("user", JSON.stringify(newUser));
@@ -55,15 +54,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       });
   };
 
-  const login = (userData: IUser) => {
-    signInWithEmailAndPassword(auth, userData.email, userData.password)
+  const login = (email: string, password: string ) => {
+    signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const firebaseUser = userCredential.user;
         const newUser: IUser = {
           id: firebaseUser.uid,
-          name: userData.name,
-          email: firebaseUser.email || userData.email,
-          password: userData.password,
+          email: firebaseUser.email || email,
+          password: password,
         };
         setUser(newUser);
         localStorage.setItem("user", JSON.stringify(newUser));
