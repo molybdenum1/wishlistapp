@@ -28,7 +28,7 @@ const data =  {
 };
 
 
-export const Main: React.FC = () => {
+export const MainPage: React.FC = () => {
     const [wishlistGroup] = useState<IWishlistGroup[]>(data.wishlistGroup);
   
     return (
