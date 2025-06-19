@@ -1,5 +1,3 @@
-import React from "react";
-
 import "./ProfilePage.css"; // Assuming you have a CSS file for styling
 import { useAuth } from "../../hooks/useAuth";
 
