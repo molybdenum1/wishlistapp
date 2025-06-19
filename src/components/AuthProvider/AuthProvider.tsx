@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { auth } from "../../config/firebase";
 import {
   createUserWithEmailAndPassword,
@@ -19,9 +19,10 @@ type AuthContextType = {
   login: (email: string, password: string) => void;
   register: (email: string, password: string) => void;
   logout: () => void;
+  loading: boolean;
 };
 
-const AuthContext = React.createContext<AuthContextType | null>(null);
+export const AuthContext = React.createContext<AuthContextType | null>(null);
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -29,12 +30,14 @@ interface AuthProviderProps {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = React.useState<IUser | null>(null);
+  const [loading, setLoading] = React.useState<boolean>(true);
 
   React.useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+    setLoading(false);
   }, []);
 
   const register = (email: string, password: string) => {
@@ -54,7 +57,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       });
   };
 
-  const login = (email: string, password: string ) => {
+  const login = (email: string, password: string) => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const firebaseUser = userCredential.user;
@@ -78,16 +81,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../components/AuthProvider/AuthProvider";
+import { useAuth } from "../../hooks/useAuth";
 import { Button, TextField } from "@mui/material";
 
 import "./LoginPage.css"; // Assuming you have a CSS file for styling

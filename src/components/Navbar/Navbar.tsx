@@ -1,6 +1,5 @@
-import React from "react";
 import "./Navbar.css";
-import { useAuth } from "../AuthProvider/AuthProvider";
+import { useAuth } from "../../hooks/useAuth";
 
 export const Navbar = () => {
 
