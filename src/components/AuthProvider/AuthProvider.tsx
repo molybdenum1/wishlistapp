@@ -1,10 +1,11 @@
 import React from "react";
-import { auth } from "../../config/firebase";
+import { auth, db } from "../../config/firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
+import { doc, setDoc } from 'firebase/firestore';
 
 interface IUser {
   id: string;
@@ -42,7 +43,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const register = (email: string, password: string) => {
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         const firebaseUser = userCredential.user;
         const newUser: IUser = {
           id: firebaseUser.uid,
@@ -51,6 +52,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         };
         setUser(newUser);
         localStorage.setItem("user", JSON.stringify(newUser));
+
+        await setDoc(doc(db, "users", firebaseUser.uid), {
+          email: newUser.email,
+          name: newUser.name || "",
+          isGuest: false,
+          // Add other user properties as needed
+        });
       })
       .catch((error) => {
         console.error("Error registering:", error);

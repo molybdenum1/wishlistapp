@@ -7,7 +7,15 @@ export interface IWishlistItem {
 }
 
 export interface IWishlistGroup {
-  id: number;
+  id: string;
   name: string;
   items: IWishlistItem[];
+}
+
+export interface IGroup {
+  title: string;
+  description: string;
+  ownerId: string;
+  sharedWith: string[];
+  createdAt: Date;
 }
