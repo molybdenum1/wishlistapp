@@ -5,10 +5,16 @@ import type { IWishlistGroup, IWishlistItem } from "../../data/types";
 import { GroupWishlist } from "../../components/GroupWishlist/GroupWishlist";
 import { useAuth } from "../../hooks/useAuth";
 import { getWishlists } from "../../api/wishlist";
+import { useNavigate } from "react-router-dom";
 
 export const MainPage: React.FC = () => {
   const { user } = useAuth();
   const [wishlistGroup, setWishlistGroups] = useState<IWishlistGroup[]>();
+  const navigate = useNavigate();
+
+  const createWishlist = () => {
+    navigate('/wishlist/create');
+  }
 
   useEffect(() => {
     if (user) {
@@ -37,7 +43,7 @@ export const MainPage: React.FC = () => {
         <p>Please create a wishlist to get started.</p>
         <p>Click on the "Create Wishlist" button to add a new wishlist.</p>
         <div>
-          <Button variant="contained" color="secondary">Create wishlist</Button>
+          <Button variant="contained" color="secondary" onClick={createWishlist}>Create wishlist</Button>
         </div>
       </div>}
     </Container>
