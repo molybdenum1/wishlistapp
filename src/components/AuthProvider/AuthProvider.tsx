@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  onIdTokenChanged
 } from "firebase/auth";
 import { doc, setDoc } from 'firebase/firestore';
 
@@ -34,11 +35,26 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loading, setLoading] = React.useState<boolean>(true);
 
   React.useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setLoading(false);
+    // Listen for token changes (including expiration)
+    const unsubscribe = onIdTokenChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        // Token is valid, update user state
+        const newUser: IUser = {
+          id: firebaseUser.uid,
+          email: firebaseUser.email || "",
+          password: "", // Don't store password
+        };
+        setUser(newUser);
+        localStorage.setItem("user", JSON.stringify(newUser));
+      } else {
+        // Token expired or user signed out
+        setUser(null);
+        localStorage.removeItem("user");
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const register = (email: string, password: string) => {
