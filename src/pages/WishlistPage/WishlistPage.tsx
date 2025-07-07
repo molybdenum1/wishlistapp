@@ -2,6 +2,7 @@ import { Button, Input } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { IWishlistGroup } from "../../data/types";
+import { Wishlist } from "../../components/Wishlist/Wishlist";
 
 export const WishlistPage = () => {
   const [wishlist, setWishlist] = useState<IWishlistGroup>(
@@ -26,6 +27,7 @@ export const WishlistPage = () => {
       id:
         name.toLowerCase() + "-" + Math.random().toString(36).substring(2, 15),
       name: name,
+      items: [],
     }));
     setWishlistName("");
   };
@@ -59,17 +61,7 @@ export const WishlistPage = () => {
           </form>
         </div>
       ) : (
-        <div>
-          <h2>View your wishlists</h2>
-          {wishlist.id && (
-            <div>
-              <h3>{wishlist.name}</h3>
-              <p>Wishlist ID: {wishlist.id}</p>
-              {/* Here you can add more functionality to view or manage items in the wishlist */}
-            </div>
-          )}
-          {!wishlist.id && <p>No wishlist created yet.</p>}
-        </div>
+        <Wishlist wishlist={wishlist} />
       )}
     </div>
   );
