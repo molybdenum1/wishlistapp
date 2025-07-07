@@ -16,7 +16,7 @@ export const WishlistPage = () => {
   const handleFormSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     createWishlist(wishlistName);
-    // console.log(wishlist);
+    // console.log(wishlist); 
     // navigate(`/wishlist/${wishlist.id}`);
   };
 

@@ -1,0 +1,74 @@
+.about-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 230px);
+    background: linear-gradient(135deg, #1e1e2f, #2c2c3f);
+    padding: 16px;
+}
+
+.about-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  background: #23272f;
+  color: #fff;
+  height: 100% ;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  animation: fadeIn 0.7s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(24px);}
+  to { opacity: 1; transform: none;}
+}
+
+.about-title {
+  font-size: 2.3rem;
+  margin-bottom: 12px;
+  color: #90caf9;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.about-intro {
+  font-size: 1.15rem;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.about-section {
+  margin-bottom: 24px;
+}
+
+.about-section-title {
+  font-size: 1.2rem;
+  color: #ffd54f;
+  margin-bottom: 8px;
+}
+
+.about-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.about-list li {
+  margin-bottom: 8px;
+  font-size: 1.07rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.about-footer {
+  text-align: center;
+  color: #bbb;
+  font-size: 1rem;
+  margin-top: 18px;
+  letter-spacing: 1px;
+  border-top: 1px solid #333;
+  padding-top: 12px;
+}
