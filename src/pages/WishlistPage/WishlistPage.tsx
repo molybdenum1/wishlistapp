@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { IWishlistGroup } from "../../data/types";
 import { Wishlist } from "../../components/Wishlist/Wishlist";
+import { useAuth } from "../../hooks/useAuth";
+import { addWishlist } from "../../api/wishlist";
 
 export const WishlistPage = () => {
   const [wishlist, setWishlist] = useState<IWishlistGroup>(
@@ -10,26 +12,49 @@ export const WishlistPage = () => {
   );
 
   const [wishlistName, setWishlistName] = useState<string>("");
+  const [isCreating, setIsCreating] = useState<boolean>(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { pathname } = location;
+  const { user } = useAuth();
 
-  const handleFormSubmit = (event: React.FormEvent) => {
+  const handleFormSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    createWishlist(wishlistName);
-    // console.log(wishlist); 
-    // navigate(`/wishlist/${wishlist.id}`);
+    if (!user) {
+      console.error("User not authenticated");
+      return;
+    }
+    await createWishlist(wishlistName);
   };
 
-  const createWishlist = (name: string) => {
-    setWishlist((prev) => ({
-      ...prev,
-      id:
-        name.toLowerCase() + "-" + Math.random().toString(36).substring(2, 15),
-      name: name,
-      items: [],
-    }));
-    setWishlistName("");
+  const createWishlist = async (name: string) => {
+    if (!user) return;
+    
+    setIsCreating(true);
+    try {
+      const localId = name.toLowerCase() + "-" + Math.random().toString(36).substring(2, 15);
+      const newWishlist: IWishlistGroup = {
+        id: localId,
+        name: name,
+        items: [],
+      };
+
+      // Save to Firebase and get the document ID
+      const firebaseId = await addWishlist(newWishlist, user.id);
+      
+      // Update the wishlist with the Firebase document ID
+      const savedWishlist: IWishlistGroup = {
+        ...newWishlist,
+        id: firebaseId,
+      };
+      
+      setWishlist(savedWishlist);
+      setWishlistName("");
+    } catch (error) {
+      console.error("Failed to create wishlist:", error);
+    } finally {
+      setIsCreating(false);
+    }
   };
 
   useEffect(() => {
@@ -55,8 +80,8 @@ export const WishlistPage = () => {
               value={wishlistName}
               onChange={(e) => setWishlistName(e.target.value)}
             />
-            <Button type="submit" variant="contained" color="primary">
-              Create Wishlist
+            <Button type="submit" variant="contained" color="primary" disabled={isCreating}>
+              {isCreating ? "Creating..." : "Create Wishlist"}
             </Button>
           </form>
         </div>

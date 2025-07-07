@@ -2,18 +2,19 @@ import { collection, addDoc, getDocs } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import type { IWishlistGroup } from "../../data/types";
 
-export const addWishlist = async (wishlist: IWishlistGroup) => {
+export const addWishlist = async (wishlist: IWishlistGroup, userId: string) => {
   try {
-    await addDoc(collection(db, "lists"), {
+    const docRef = await addDoc(collection(db, "users", userId, "lists"), {
       name: wishlist.name,
-      // items: wishlist.items,
+      items: wishlist.items,
       createdAt: new Date(),
       updatedAt: new Date(),
-    }).then((docRef) => {
-      console.log("Wishlist added with ID: ", docRef.id);
     });
+    console.log("Wishlist added with ID: ", docRef.id);
+    return docRef.id;
   } catch (error) {
     console.error("Error adding wishlist: ", error);
+    throw error;
   }
 };
 
