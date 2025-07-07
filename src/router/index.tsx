@@ -25,6 +25,7 @@ const router = createBrowserRouter([
         element: <ProtectedRouter />,
         children: [
           { index: true, element: <MainPage /> },
+          { path: "wishlist/create", element: <WishlistPage /> },
           { path: "wishlist/:id", element: <WishlistPage /> },
           { path: "profile", element: <ProfilePage /> },
 

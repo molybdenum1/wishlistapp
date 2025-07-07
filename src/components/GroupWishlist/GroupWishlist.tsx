@@ -1,4 +1,3 @@
-import React from "react";
 import type { IWishlistGroup } from "../../data/types";
 import {
   Button,
