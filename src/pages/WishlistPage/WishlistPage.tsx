@@ -13,6 +13,7 @@ export const WishlistPage = () => {
 
   const [wishlistName, setWishlistName] = useState<string>("");
   const [isCreating, setIsCreating] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false); // <-- loading state
   const location = useLocation();
   const navigate = useNavigate();
   const { pathname } = location;
@@ -29,10 +30,12 @@ export const WishlistPage = () => {
 
   const createWishlist = async (name: string) => {
     if (!user) return;
-    
+
     setIsCreating(true);
+    setLoading(true); // <-- start loading
     try {
-      const localId = name.toLowerCase() + "-" + Math.random().toString(36).substring(2, 15);
+      const localId =
+        name.toLowerCase() + "-" + Math.random().toString(36).substring(2, 15);
       const newWishlist: IWishlistGroup = {
         id: localId,
         name: name,
@@ -41,19 +44,20 @@ export const WishlistPage = () => {
 
       // Save to Firebase and get the document ID
       const firebaseId = await addWishlist(newWishlist, user.id);
-      
+
       // Update the wishlist with the Firebase document ID
       const savedWishlist: IWishlistGroup = {
         ...newWishlist,
         id: firebaseId,
       };
-      
+
       setWishlist(savedWishlist);
       setWishlistName("");
     } catch (error) {
       console.error("Failed to create wishlist:", error);
     } finally {
       setIsCreating(false);
+      setLoading(false); // <-- stop loading
     }
   };
 
@@ -63,6 +67,14 @@ export const WishlistPage = () => {
     }
     // eslint-disable-next-line
   }, [wishlist.id]);
+
+  if (loading) {
+    return (
+      <div style={{ textAlign: "center", marginTop: "2rem" }}>
+        <h2>Loading...</h2>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -80,7 +92,12 @@ export const WishlistPage = () => {
               value={wishlistName}
               onChange={(e) => setWishlistName(e.target.value)}
             />
-            <Button type="submit" variant="contained" color="primary" disabled={isCreating}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={isCreating}
+            >
               {isCreating ? "Creating..." : "Create Wishlist"}
             </Button>
           </form>
