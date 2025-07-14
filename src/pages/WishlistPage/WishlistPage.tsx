@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import type { IWishlistGroup } from "../../data/types";
 import { Wishlist } from "../../components/Wishlist/Wishlist";
 import { useAuth } from "../../hooks/useAuth";
-import { addWishlist } from "../../api/wishlist";
+import { addWishlist, getWishlists } from "../../api/wishlist";
 
 export const WishlistPage = () => {
   const [wishlist, setWishlist] = useState<IWishlistGroup>(
@@ -64,6 +64,21 @@ export const WishlistPage = () => {
   useEffect(() => {
     if (pathname === "/wishlist/create" && wishlist.id) {
       navigate(`/wishlist/${wishlist.id}`, { replace: true });
+    } else {
+      // If not creating a new wishlist, fetch the existing wishlist
+      setLoading(true);
+      if (!user) return;
+
+      getWishlists(user.id).then((wishlists) => {
+        const foundWishlist = wishlists.find((w) => w.id === wishlist.id) as IWishlistGroup | undefined;
+        console.log("Fetched wishlists:", wishlists);
+        if (foundWishlist) {
+          setWishlist(foundWishlist);
+        } else {
+          console.error("Wishlist not found");
+        }
+        setLoading(false);
+      });
     }
     // eslint-disable-next-line
   }, [wishlist.id]);
