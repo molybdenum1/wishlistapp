@@ -1,0 +1,84 @@
+.profile-container {
+  max-width: 400px;
+  /* min-height: calc(100vh - 80px); */
+  margin: 40px auto;
+  padding: 36px 28px 28px 28px;
+  background: #23272f;
+  color: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeIn 0.7s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(24px);}
+  to { opacity: 1; transform: none;}
+}
+
+.profile-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.profile-form label {
+  font-size: 1.05rem;
+  margin-bottom: 4px;
+}
+
+.profile-input {
+  margin-top: 6px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1.5px solid #90caf9;
+  background: #1e1e2f;
+  color: #fff;
+  font-size: 1rem;
+  transition: border 0.2s;
+}
+
+.profile-input:focus {
+  outline: none;
+  border-color: #ffd54f;
+  background: #23272f;
+}
+
+.profile-btn {
+  padding: 11px 0;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #90caf9 60%, #64b5f6 100%);
+  color: #23272f;
+  font-weight: bold;
+  font-size: 1.08rem;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s, color 0.2s;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(144,202,249,0.08);
+}
+
+.profile-btn.logout {
+  background: linear-gradient(90deg, #f44336 60%, #e57373 100%);
+  color: #fff;
+  margin-top: 14px;
+}
+
+.profile-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.profile-message {
+  margin-top: 16px;
+  color: #ffd54f;
+  text-align: center;
+  font-size: 1.05rem;
+  letter-spacing: 0.5px;
+}
