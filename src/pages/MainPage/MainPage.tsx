@@ -1,6 +1,5 @@
-import { Button, Container } from "@mui/material";
+import { Container, Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-// import { data } from "../data";
 import type { IWishlistGroup, IWishlistItem } from "../../data/types";
 import { GroupWishlist } from "../../components/GroupWishlist/GroupWishlist";
 import { useAuth } from "../../hooks/useAuth";
@@ -43,25 +42,69 @@ export const MainPage: React.FC = () => {
           <h2>Loading...</h2>
         </div>
       ) : (
-        wishlistGroup &&
-        wishlistGroup.map((group) => <GroupWishlist group={group} />)
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 3,
+            justifyContent: wishlistGroup?.length ? "flex-start" : "center",
+            alignItems: "flex-start",
+            marginBottom: 4,
+          }}
+        >
+          {wishlistGroup &&
+            wishlistGroup.map((group) => (
+              <GroupWishlist group={group} key={group.id} />
+            ))}
+          {/* "Add New" as a wishlist-like card */}
+          <Box
+            sx={{
+              maxWidth: 420,
+              minWidth: 320,
+              minHeight: 180,
+              margin: "24px auto",
+              borderRadius: 3,
+              boxShadow: "0 4px 24px rgba(0,0,0,0.13)",
+              background: "#23272f",
+              color: "#fff",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              transition: "box-shadow 0.2s, background 0.2s",
+              "&:hover": {
+                background: "#1e1e2f",
+                boxShadow: "0 6px 32px rgba(144,202,249,0.15)",
+              },
+            }}
+            onClick={createWishlist}
+          >
+            <Typography
+              variant="h5"
+              sx={{
+                color: "#90caf9",
+                textAlign: "center",
+                fontWeight: 600,
+                letterSpacing: 1,
+                mb: 1,
+              }}
+            >
+              + Add New
+            </Typography>
+            <Typography sx={{ color: "#bbb", fontSize: 15, textAlign: "center" }}>
+              Create a new wishlist
+            </Typography>
+          </Box>
+        </Box>
       )}
       {!wishlistGroup?.length && (
         <div>
           <p>No wishlists found.</p>
           <p>Please create a wishlist to get started.</p>
-          <p>Click on the "Create Wishlist" button to add a new wishlist.</p>
-          <div>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={createWishlist}
-            >
-              Create wishlist
-            </Button>
-          </div>
+          <p>Click on the "Add New" button to add a new wishlist.</p>
         </div>
       )}
     </Container>
   );
-};
+}
