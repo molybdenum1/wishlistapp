@@ -1,4 +1,4 @@
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import { collection, addDoc, getDocs, doc, getDoc } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import type { IWishlistGroup } from "../../data/types";
 
@@ -29,5 +29,20 @@ export const getWishlists = async (userId: string) => {
   } catch (error) {
     console.error("Error getting wishlists: ", error);
     return [];
+  }
+};
+
+export const getWishlistById = async (userId: string, wishlistId: string) => {
+  try {
+    const docRef = doc(db, "users", userId, "lists", wishlistId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return { id: docSnap.id, ...docSnap.data() } as IWishlistGroup;
+    } else {
+      throw new Error("Wishlist not found");
+    }
+  } catch (error) {
+    console.error("Error getting wishlist by ID: ", error);
+    throw error;
   }
 };

@@ -1,23 +1,24 @@
-import { Button, Input } from "@mui/material";
+import { Button, Input, CircularProgress, Box } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import type { IWishlistGroup } from "../../data/types";
 import { Wishlist } from "../../components/Wishlist/Wishlist";
 import { useAuth } from "../../hooks/useAuth";
-import { addWishlist, getWishlists } from "../../api/wishlist";
+import { addWishlist, getWishlistById } from "../../api/wishlist";
 
 export const WishlistPage = () => {
-  const [wishlist, setWishlist] = useState<IWishlistGroup>(
-    {} as IWishlistGroup
-  );
-
+  const [wishlist, setWishlist] = useState<IWishlistGroup>({} as IWishlistGroup);
   const [wishlistName, setWishlistName] = useState<string>("");
   const [isCreating, setIsCreating] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false); // <-- loading state
+  const [loading, setLoading] = useState<boolean>(false);
+  const [notFound, setNotFound] = useState<boolean>(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { pathname } = location;
+  const { id } = useParams();
   const { user } = useAuth();
+  console.log(id);
+  
 
   const handleFormSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -32,7 +33,7 @@ export const WishlistPage = () => {
     if (!user) return;
 
     setIsCreating(true);
-    setLoading(true); // <-- start loading
+    setLoading(true);
     try {
       const localId =
         name.toLowerCase() + "-" + Math.random().toString(36).substring(2, 15);
@@ -57,36 +58,47 @@ export const WishlistPage = () => {
       console.error("Failed to create wishlist:", error);
     } finally {
       setIsCreating(false);
-      setLoading(false); // <-- stop loading
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     if (pathname === "/wishlist/create" && wishlist.id) {
       navigate(`/wishlist/${wishlist.id}`, { replace: true });
-    } else {
-      // If not creating a new wishlist, fetch the existing wishlist
+    } else if (id && pathname !== "/wishlist/create" && user) {
       setLoading(true);
-      if (!user) return;
-
-      getWishlists(user.id).then((wishlists) => {
-        const foundWishlist = wishlists.find((w) => w.id === wishlist.id) as IWishlistGroup | undefined;
-        console.log("Fetched wishlists:", wishlists);
-        if (foundWishlist) {
-          setWishlist(foundWishlist);
-        } else {
-          console.error("Wishlist not found");
-        }
-        setLoading(false);
-      });
+      setNotFound(false);
+      getWishlistById(user.id, id)
+        .then((foundWishlist) => {
+          if (foundWishlist) {
+            setWishlist(foundWishlist);
+          } else {
+            setWishlist({} as IWishlistGroup);
+            setNotFound(true);
+          }
+        })
+        .catch(() => {
+          setNotFound(true);
+        })
+        .finally(() => setLoading(false));
     }
     // eslint-disable-next-line
-  }, [wishlist.id]);
+  }, [wishlist.id, id, pathname]);
 
   if (loading) {
     return (
-      <div style={{ textAlign: "center", marginTop: "2rem" }}>
-        <h2>Loading...</h2>
+      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "3rem" }}>
+        <CircularProgress color="primary" />
+        <span style={{ marginTop: 16, color: "#90caf9" }}>Loading...</span>
+      </Box>
+    );
+  }
+
+   if (notFound) {
+    return (
+      <div style={{ textAlign: "center", marginTop: "2rem", color: "#f44336" }}>
+        <h2>Wishlist not found</h2>
+        <p>The wishlist you are looking for does not exist or was deleted.</p>
       </div>
     );
   }

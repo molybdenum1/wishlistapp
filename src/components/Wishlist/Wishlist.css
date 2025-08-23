@@ -1,0 +1,87 @@
+.wishlist-container {
+  max-width: 600px;
+  margin: 32px auto;
+  padding: 28px 20px;
+  background: #23272f;
+  color: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.wishlist-container h2 {
+  text-align: center;
+  color: #90caf9;
+  margin-bottom: 18px;
+}
+
+.wishlist-container h3 {
+  color: #ffd54f;
+  margin-bottom: 8px;
+}
+
+.wishlist-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 18px;
+  background: #1e1e2f;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.wishlist-table th,
+.wishlist-table td {
+  padding: 12px 10px;
+  text-align: left;
+  border-bottom: 1px solid #333;
+}
+
+.wishlist-table th {
+  background: #23272f;
+  color: #90caf9;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.wishlist-table tr:last-child td {
+  border-bottom: none;
+}
+
+.wishlist-table input[type="text"] {
+  width: 100%;
+  padding: 7px 10px;
+  border-radius: 6px;
+  border: 1px solid #90caf9;
+  background: #23272f;
+  color: #fff;
+  font-size: 1rem;
+  transition: border 0.2s;
+}
+
+.wishlist-table input[type="text"]:focus {
+  outline: none;
+  border-color: #ffd54f;
+  background: #1e1e2f;
+}
+
+.wishlist-table td[colspan] {
+  text-align: center;
+  color: #bbb;
+  font-style: italic;
+  padding: 18px 0;
+}
+/* Add to Wishlist.css */
+.wishlist-add-btn {
+  padding: 7px 16px;
+  border: none;
+  border-radius: 6px;
+  background: #90caf9;
+  color: #23272f;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.wishlist-add-btn:hover {
+  background: #64b5f6;
+}
