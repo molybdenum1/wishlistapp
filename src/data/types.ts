@@ -1,5 +1,5 @@
 export interface IWishlistItem {
-  id: number;
+  id: string;
   name: string;
   description: string;
   price: number;

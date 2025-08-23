@@ -1,6 +1,6 @@
-import { collection, addDoc, getDocs, doc, getDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs, doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
 import { db } from "../../config/firebase";
-import type { IWishlistGroup } from "../../data/types";
+import type { IWishlistGroup, IWishlistItem } from "../../data/types";
 
 export const addWishlist = async (wishlist: IWishlistGroup, userId: string) => {
   try {
@@ -43,6 +43,25 @@ export const getWishlistById = async (userId: string, wishlistId: string) => {
     }
   } catch (error) {
     console.error("Error getting wishlist by ID: ", error);
+    throw error;
+  }
+};
+
+export const addItemToWishlist = async (
+  userId: string,
+  wishlistId: string,
+  item: IWishlistItem
+) => {
+  try {
+    const wishlistRef = doc(db, "users", userId, "lists", wishlistId);
+    await updateDoc(wishlistRef, {
+      items: arrayUnion(item),
+      updatedAt: new Date(),
+    });
+    console.log("Item added to wishlist:", wishlistId);
+    return true;
+  } catch (error) {
+    console.error("Error adding item to wishlist: ", error);
     throw error;
   }
 };
