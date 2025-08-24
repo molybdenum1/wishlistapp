@@ -1,10 +1,11 @@
-import { Button, Input, CircularProgress, Box } from "@mui/material";
+import { Button, Input } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import type { IWishlistGroup } from "../../data/types";
 import { Wishlist } from "../../components/Wishlist/Wishlist";
 import { useAuth } from "../../hooks/useAuth";
 import { addWishlist, getWishlistById } from "../../api/wishlist";
+import LoadingCircle from "../../components/LoadingCircle";
 
 export const WishlistPage = () => {
   const [wishlist, setWishlist] = useState<IWishlistGroup>({} as IWishlistGroup);
@@ -87,10 +88,7 @@ export const WishlistPage = () => {
 
   if (loading) {
     return (
-      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "3rem" }}>
-        <CircularProgress color="primary" />
-        <span style={{ marginTop: 16, color: "#90caf9" }}>Loading...</span>
-      </Box>
+      <LoadingCircle />
     );
   }
 
