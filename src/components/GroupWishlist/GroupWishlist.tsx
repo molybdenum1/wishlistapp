@@ -12,11 +12,17 @@ export const GroupWishlist = ({ group }: { group: IWishlistGroup }) => {
     <Card
       sx={{
         maxWidth: 420,
+        minWidth: 320,
+        minHeight: 280,
+        height: 340,
         margin: "24px auto",
         borderRadius: 3,
         boxShadow: "0 4px 24px rgba(0,0,0,0.13)",
         background: "#23272f",
         color: "#fff",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
       }}
     >
       <div key={group.id}>

@@ -5,6 +5,7 @@ import { GroupWishlist } from "../../components/GroupWishlist/GroupWishlist";
 import { useAuth } from "../../hooks/useAuth";
 import { getWishlists } from "../../api/wishlist";
 import { useNavigate } from "react-router-dom";
+import LoadingCircle from "../../components/LoadingCircle";
 
 export const MainPage: React.FC = () => {
   const { user } = useAuth();
@@ -38,9 +39,7 @@ export const MainPage: React.FC = () => {
     <Container>
       <h1>Main</h1>
       {loading ? (
-        <div style={{ textAlign: "center", marginTop: "2rem" }}>
-          <h2>Loading...</h2>
-        </div>
+        <LoadingCircle />
       ) : (
         <Box
           sx={{
