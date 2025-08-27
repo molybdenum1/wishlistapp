@@ -4,9 +4,9 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  onIdTokenChanged
+  onIdTokenChanged,
 } from "firebase/auth";
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc } from "firebase/firestore";
 
 interface IUser {
   id: string;
@@ -57,45 +57,53 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return () => unsubscribe();
   }, []);
 
-  const register = (email: string, password: string) => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
-        const firebaseUser = userCredential.user;
-        const newUser: IUser = {
-          id: firebaseUser.uid,
-          email: firebaseUser.email || email,
-          password: password,
-        };
-        setUser(newUser);
-        localStorage.setItem("user", JSON.stringify(newUser));
+  const register = async (email: string, password: string) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const firebaseUser = userCredential.user;
+      const newUser: IUser = {
+        id: firebaseUser.uid,
+        email: firebaseUser.email || email,
+        password: password,
+      };
+      setUser(newUser);
+      localStorage.setItem("user", JSON.stringify(newUser));
 
-        await setDoc(doc(db, "users", firebaseUser.uid), {
-          email: newUser.email,
-          name: newUser.name || "",
-          isGuest: false,
-          // Add other user properties as needed
-        });
-      })
-      .catch((error) => {
-        console.error("Error registering:", error);
+      await setDoc(doc(db, "users", firebaseUser.uid), {
+        email: newUser.email,
+        name: newUser.name || "",
+        isGuest: false,
+        // Add other user properties as needed
       });
+    } catch (error) {
+      console.error("Error registering:", error);
+      throw error; // <-- propagate error
+    }
   };
 
-  const login = (email: string, password: string) => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const firebaseUser = userCredential.user;
-        const newUser: IUser = {
-          id: firebaseUser.uid,
-          email: firebaseUser.email || email,
-          password: password,
-        };
-        setUser(newUser);
-        localStorage.setItem("user", JSON.stringify(newUser));
-      })
-      .catch((error) => {
-        console.error("Error signing in:", error);
-      });
+  const login = async (email: string, password: string) => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const firebaseUser = userCredential.user;
+      const newUser: IUser = {
+        id: firebaseUser.uid,
+        email: firebaseUser.email || email,
+        password: password,
+      };
+      setUser(newUser);
+      localStorage.setItem("user", JSON.stringify(newUser));
+    } catch (error) {
+      console.error("Error signing in:", error);
+      throw error; // <-- propagate error
+    }
   };
 
   const logout = () => {
