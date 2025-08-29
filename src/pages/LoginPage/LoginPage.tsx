@@ -6,7 +6,7 @@ import { useAuthForm } from "../../hooks/useAuthForm";
 import "./LoginPage.css";
 
 export const LoginPage = () => {
-  const { login } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
   const {
     email,
     setEmail,
@@ -17,6 +17,15 @@ export const LoginPage = () => {
     passwordError,
     handleSubmit,
   } = useAuthForm(login, { onSuccessRedirect: "/" });
+
+  const handleGoogleLogin = async () => {
+    try {
+      await loginWithGoogle();
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Error logging in with Google:", error);
+    }
+  };
 
   return (
     <div className="login-page">
@@ -51,6 +60,10 @@ export const LoginPage = () => {
         </Button>
         {error && <p className="error">{error}</p>}
       </form>
+      <p>or</p>
+      <Button variant="contained" color="secondary" onClick={handleGoogleLogin}>
+        Login with Google
+      </Button>
     </div>
   );
 };
