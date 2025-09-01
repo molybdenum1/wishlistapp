@@ -9,6 +9,8 @@ export interface IWishlistItem {
 export interface IWishlistGroup {
   id: string;
   name: string;
+  ownerId?: string;
+  isPrivate: boolean;
   items: IWishlistItem[];
 }
 

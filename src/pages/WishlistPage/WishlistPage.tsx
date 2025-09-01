@@ -42,6 +42,8 @@ export const WishlistPage = () => {
         id: localId,
         name: name,
         items: [],
+        ownerId: user.id,
+        isPrivate: true,
       };
 
       // Save to Firebase and get the document ID

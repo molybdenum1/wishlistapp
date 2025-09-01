@@ -1,4 +1,4 @@
-import { collection, addDoc, getDocs, doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
+import { collection, addDoc, getDocs, doc, getDoc, updateDoc, arrayUnion, deleteDoc } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import type { IWishlistGroup, IWishlistItem } from "../../data/types";
 
@@ -62,6 +62,18 @@ export const addItemToWishlist = async (
     return true;
   } catch (error) {
     console.error("Error adding item to wishlist: ", error);
+    throw error;
+  }
+};
+
+export const deleteWishlist = async (userId: string, wishlistId: string) => {
+  try {
+    const wishlistRef = doc(db, "users", userId, "lists", wishlistId);
+    await deleteDoc(wishlistRef);
+    console.log("Wishlist deleted:", wishlistId);
+    return true;
+  } catch (error) {
+    console.error("Error deleting wishlist: ", error);
     throw error;
   }
 };

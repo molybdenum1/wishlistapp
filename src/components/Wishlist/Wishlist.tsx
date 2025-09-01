@@ -2,8 +2,10 @@ import type { IWishlistGroup } from "../../data/types";
 import "./Wishlist.css";
 import { useState } from "react";
 import AddItemModal from "../AddItemModal";
-import { addItemToWishlist } from "../../api/wishlist";
+import { addItemToWishlist, deleteWishlist } from "../../api/wishlist";
 import { useAuth } from "../../hooks/useAuth";
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export const Wishlist = ({
   wishlist: propWishlist,
@@ -15,6 +17,8 @@ export const Wishlist = ({
   );
   const [modalOpen, setModalOpen] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const navigate = useNavigate();
   const { user } = useAuth();
 
   const handleOpenModal = () => setModalOpen(true);
@@ -61,9 +65,36 @@ export const Wishlist = ({
     }
   };
 
+  const handleDeleteWishlist = async () => {
+    if (!user || !wishlist?.id) return;
+    setDeleteLoading(true);
+    try {
+      await deleteWishlist(user.id, wishlist.id);
+      setWishlist(undefined);
+      navigate("/");
+    } catch (error) {
+      console.error("Failed to delete wishlist:", error);
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
   return (
     <div className="wishlist-container">
-      <h2>View your wishlist</h2>
+      <span>
+        <h2>View your wishlist</h2>
+        {/* //user.id === wishlist?.ownerI  */}
+        {user && (
+          <Button
+            onClick={handleDeleteWishlist}
+            color="error"
+            variant="outlined"
+            disabled={deleteLoading}
+          >
+            {deleteLoading ? "deleting..." : "Delete Wishlist"}
+          </Button>
+        )}
+      </span>
       {wishlist && wishlist.id ? (
         <div>
           <h3>{wishlist.name}</h3>
